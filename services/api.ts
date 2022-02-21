@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
 import { signOut } from '../contexts/AuthContext'
-import { AuthTokenError } from '../errors/AuthTokenError'
+import { AuthTokenError } from './errors/AuthTokenError'
 
 let isRefreshing = false
 let failedRequestsQueue = []
@@ -53,7 +53,7 @@ export function setupAPIClient(ctx = undefined) {
 									}
 								)
 
-								api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+								api.defaults.headers['Authorization'] = `Bearer ${token}`
 
 								failedRequestsQueue.forEach((request) =>
 									request.onSuccess(token)
@@ -64,7 +64,7 @@ export function setupAPIClient(ctx = undefined) {
 								failedRequestsQueue.forEach((request) => request.onFailure(err))
 								failedRequestsQueue = []
 
-								if (typeof window !== undefined) {
+								if (typeof window !== 'undefined') {
 									signOut()
 								}
 							})
